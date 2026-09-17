@@ -40,48 +40,68 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Product Catalog')),
-      body: Consumer<ProductProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (provider.errorMessage != null && provider.products.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(provider.errorMessage!),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => provider.fetchProducts(),
-                    child: const Text('Retry'),
-                  ),
-                ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Search products',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
               ),
-            );
-          }
+              onChanged: (query) {
+                context.read<ProductProvider>().onSearchChanged(query);
+              },
+            ),
+          ),
+          Expanded(
+            child: Consumer<ProductProvider>(
+              builder: (context, provider, child) {
 
-          if (provider.products.isEmpty) {
-            return const Center(child: Text('No products found.'));
-          }
+                // Restored your missing loading state!
+                if (provider.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          return ListView.builder(
-            controller: _scrollController,
-            itemCount: provider.products.length + (provider.isFetchingMore ? 1 : 0),
-            itemBuilder: (context, index) {
+                if (provider.errorMessage != null && provider.products.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(provider.errorMessage!),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () => provider.fetchProducts(),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
 
-              if (index == provider.products.length) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Center(child: CircularProgressIndicator()),
+                if (provider.products.isEmpty) {
+                  return const Center(child: Text('No products found.'));
+                }
+
+                return ListView.builder(
+                  controller: _scrollController,
+                  itemCount: provider.products.length + (provider.isFetchingMore ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == provider.products.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    return ProductCard(product: provider.products[index]);
+                  },
                 );
-              }
-
-              return ProductCard(product: provider.products[index]);
-            },
-          );
-        },
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
