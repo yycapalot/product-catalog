@@ -57,6 +57,23 @@ class ProductDetailScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 24),
+
+                  Chip(
+                    label: Text(
+                      product.category.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    backgroundColor: Colors.blue.withOpacity(0.1),
+                    side: BorderSide.none,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
                   Text(
                     'Description',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
