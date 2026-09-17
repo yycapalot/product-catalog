@@ -1,17 +1,18 @@
-# product_catalog
+# Product Catalog App
 
-A new Flutter product catalog project.
+A Flutter application built for the Junior Mobile Developer technical assessment. It fetches and displays products from the DummyJSON API, featuring infinite scrolling, state management, and a debounced search.
 
-## Getting Started
+## Architecture
+I implemented a 2-layer architecture to separate business logic from the UI:
+* **Data Layer:** Contains the `Product` and `ProductResponse` models with defensive JSON parsing, and the `ApiService` which handles HTTP requests.
+* **Presentation Layer:** Contains the UI screens (`ProductListScreen`, `ProductDetailScreen`), reusable components (`ProductCard`), and the `ProductProvider` for state management.
 
-This project is a starting point for a Flutter application.
+## State Management
+I chose **Provider** because it offers a clean, reactive way to handle mutually exclusive UI states (Loading, Success, Empty, Error) and isolates the pagination/search logic away from the widget tree.
 
-A few resources to get you started if this is your first Flutter project:
+## Search Implementation
+I implemented a **server-side debounced search** (500ms delay) using the DummyJSON search endpoint. 
+* **Why server-side over client-side?** Filtering a paginated list on the client would only search the currently loaded items (e.g., the first 20). Hitting the search endpoint queries the entire database, providing accurate results without requiring the app to download the full catalog into memory.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## AI Usage Disclosure
+I utilized AI as a thought partner to refine the timer-based search debounce, and troubleshoot initial Android Studio environment path errors on Windows. All core logic and architectural choices are my own.
