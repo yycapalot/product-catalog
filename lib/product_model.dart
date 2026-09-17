@@ -34,7 +34,7 @@ class Product{
   }
 }
 
-// Product pagination details
+// Product pagination response
 class ProductResponse{
   final List<Product> products;
   final int total;
